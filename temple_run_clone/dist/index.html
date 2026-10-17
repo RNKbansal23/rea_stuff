@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delhi Runner 3D — Connaught Place (CP) Edition</title>
+  <meta name="description" content="Realistic 3D endless runner set on Connaught Place, New Delhi. Featuring white colonial arcades, Central Park, Delhi Police barricades, auto-rickshaws, and traffic signals.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Roboto+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/index-B-vL184e.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-rs9lUpql.css">
+</head>
+<body>
+  <!-- 3D Canvas Mount -->
+  <div id="game-container"></div>
+
+  <!-- HUD Overlay -->
+  <div id="hud-overlay">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <!-- Left: Delhi Rupee Coin Counter & Speed -->
+      <div class="coin-meter-group">
+        <div class="delhi-metro-icon" title="Delhi Metro Rajiv Chowk">
+          <svg viewBox="0 0 100 100" class="metro-svg">
+            <circle cx="50" cy="50" r="46" fill="#0072ce"/>
+            <rect x="25" y="32" width="50" height="36" rx="8" fill="#ffffff"/>
+            <rect x="32" y="38" width="16" height="14" rx="2" fill="#0072ce"/>
+            <rect x="52" y="38" width="16" height="14" rx="2" fill="#0072ce"/>
+            <circle cx="38" cy="58" r="4" fill="#ffcc00"/>
+            <circle cx="62" cy="58" r="4" fill="#ffcc00"/>
+          </svg>
+        </div>
+        <div class="coin-bar-container">
+          <div class="delhi-badge">RAJIV CHOWK • CP</div>
+          <div class="coin-stats-row">
+            <span class="rupee-symbol">₹</span>
+            <span class="coin-number" id="hud-coins">₹0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Score & Distance from Janpath -->
+      <div class="ancient-score-box">
+        <div class="score-row">
+          <span class="score-title">SCORE</span>
+          <span class="score-digits" id="hud-score">0</span>
+        </div>
+        <div class="distance-row">
+          <span class="dist-icon">📍</span>
+          <span class="dist-digits" id="hud-distance">0m</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stumble Warning -->
+    <div id="stumble-warning">
+      ⚠️ DELHI TRAFFIC POLICE IS RIGHT BEHIND YOU!
+    </div>
+
+    <!-- Bottom Controls Hint -->
+    <div class="bottom-bar">
+      <div class="controls-hint">
+        <div class="ctrl-item"><kbd>A</kbd> <kbd>D</kbd> / <kbd>←</kbd> <kbd>→</kbd> Switch 3 Road Lanes</div>
+        <div class="ctrl-item"><kbd>W</kbd> / <kbd>↑</kbd> Jump Barricades & Autos</div>
+        <div class="ctrl-item"><kbd>S</kbd> / <kbd>↓</kbd> Slide Under Overhead Boards</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start Screen with Connaught Place Skyline -->
+  <div class="screen-modal" id="start-screen">
+    <div class="modal-content">
+      <div class="cp-emblem-wrapper">
+        <div class="cp-circle-badge">CP</div>
+      </div>
+
+      <h1 class="game-title">CONNAUGHT PLACE</h1>
+      <p class="subtitle">DELHI ENDLESS 3D RUNNER</p>
+
+      <button class="btn-run" id="btn-start">SPRINT NOW (SPACE)</button>
+
+      <div class="keys-grid">
+        <div class="key-card">
+          <kbd>W</kbd> / <kbd>↑</kbd>
+          <span>Jump Delhi Police Barricades & Autos</span>
+        </div>
+        <div class="key-card">
+          <kbd>S</kbd> / <kbd>↓</kbd>
+          <span>Slide Under Road Gantries</span>
+        </div>
+        <div class="key-card">
+          <kbd>A</kbd> <kbd>D</kbd> / <kbd>←</kbd> <kbd>→</kbd>
+          <span>Dodge Traffic Lanes</span>
+        </div>
+        <div class="key-card">
+          <kbd>Swipe</kbd>
+          <span>Touch / Mobile Screen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div class="screen-modal" id="game-over-screen" style="display: none;">
+    <div class="modal-content">
+      <h2 class="game-title" style="font-size: 2.8rem;">CHALLAN!</h2>
+      <p class="death-banner" id="death-cause">CAUGHT BY DELHI TRAFFIC POLICE!</p>
+
+      <div class="results-card">
+        <div class="res-row">
+          <span class="res-title">Final Score</span>
+          <span class="res-num" id="final-score">0</span>
+        </div>
+        <div class="res-row">
+          <span class="res-title">Distance Sprinted</span>
+          <span class="res-num" id="final-distance">0m</span>
+        </div>
+        <div class="res-row">
+          <span class="res-title">Rupees Collected</span>
+          <span class="res-num" id="final-coins">₹0</span>
+        </div>
+      </div>
+
+      <button class="btn-run" id="btn-restart">RUN AGAIN (SPACE)</button>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="serika-dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monkeytype Clone — Fast & Minimalist Typing Test</title>
+  <meta name="description" content="A blazing-fast, highly accurate, customizable Monkeytype clone with mechanical keyboard sound effects, real-time WPM stats, and deep analytics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header>
+      <div class="brand" id="brand-logo" title="Monkeytype Clone">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">monkey<span>type</span></div>
+          <div class="brand-version">offline pro v2.0</div>
+        </div>
+      </div>
+
+      <!-- Quick Nav Buttons -->
+      <div class="nav-actions">
+        <!-- Sound Toggle -->
+        <button class="action-btn" id="btn-sound" title="Sound Effects">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span class="tooltip" id="sound-label">Sound: Off</span>
+        </button>
+
+        <!-- Theme Selector -->
+        <button class="action-btn" id="btn-theme-modal" title="Change Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a7 7 0 0 0 7 7c0 2-2 3-2 3s-1 1-1 3"></path>
+          </svg>
+          <span class="tooltip" id="theme-label">Theme: Serika</span>
+        </button>
+
+        <!-- History Modal -->
+        <button class="action-btn" id="btn-history-modal" title="Typing History & Bests">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span class="tooltip">History</span>
+        </button>
+
+        <!-- Command Palette Shortcut -->
+        <button class="action-btn" id="btn-cmd-palette" title="Command Palette (Esc)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="9" x2="20" y2="9"></line>
+            <line x1="4" y1="15" x2="20" y2="15"></line>
+            <line x1="10" y1="3" x2="8" y2="21"></line>
+            <line x1="16" y1="3" x2="14" y2="21"></line>
+          </svg>
+          <span class="tooltip">Commands (Esc)</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Typing Workspace -->
+    <main id="main-content">
+      <!-- Mode Bar -->
+      <div class="config-bar-wrapper">
+        <div class="config-bar" id="config-bar">
+          <!-- Modifiers -->
+          <div class="config-group" id="cfg-modifiers">
+            <button class="config-btn" id="cfg-opt-punctuation" data-mod="punctuation">@ punctuation</button>
+            <button class="config-btn" id="cfg-opt-numbers" data-mod="numbers"># numbers</button>
+          </div>
+
+          <div class="config-divider"></div>
+
+          <!-- Mode Selection -->
+          <div class="config-group" id="cfg-mode">
+            <button class="config-btn active" data-mode="time">time</button>
+            <button class="config-btn" data-mode="words">words</button>
+            <button class="config-btn" data-mode="quote">quote</button>
+            <button class="config-btn" data-mode="zen">zen</button>
+          </div>
+
+          <div class="config-divider" id="cfg-sub-divider"></div>
+
+          <!-- Mode Values (Dynamic) -->
+          <div class="config-group" id="cfg-sub-values">
+            <button class="config-btn" data-val="15">15</button>
+            <button class="config-btn active" data-val="30">30</button>
+            <button class="config-btn" data-val="60">60</button>
+            <button class="config-btn" data-val="120">120</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CapsLock Warning -->
+      <div class="caps-warning" id="caps-warning">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+        <span>Caps Lock is ON</span>
+      </div>
+
+      <!-- Live Typing HUD -->
+      <div class="live-hud" id="live-hud">
+        <div class="hud-item">
+          <div class="hud-value" id="hud-timer">30</div>
+          <div class="hud-label" id="hud-timer-label">seconds</div>
+        </div>
+        <div class="hud-item" style="opacity: 0.6;">
+          <div class="hud-value" id="hud-live-wpm">0</div>
+          <div class="hud-label">live wpm</div>
+        </div>
+        <div class="hud-item" style="opacity: 0.6;">
+          <div class="hud-value" id="hud-live-acc">100%</div>
+          <div class="hud-label">accuracy</div>
+        </div>
+      </div>
+
+      <!-- Arena -->
+      <div class="arena-wrapper" id="arena-wrapper">
+        <div class="focus-overlay" id="focus-overlay">
+          <div class="focus-overlay-content">
+            <div class="focus-overlay-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+              </svg>
+            </div>
+            <span>Click or press any key to focus</span>
+          </div>
+        </div>
+
+        <input type="text" id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+        <div class="typing-arena" id="typing-arena">
+          <div id="caret" class="blink"></div>
+          <div id="words-container"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Hints -->
+      <div class="bottom-hints">
+        <button class="restart-btn" id="btn-quick-restart" title="Restart Test">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+        </button>
+        <div class="hint-pill"><kbd>tab</kbd> + <kbd>enter</kbd> / <kbd>tab</kbd> - restart test</div>
+        <div class="hint-pill"><kbd>esc</kbd> - command palette</div>
+      </div>
+
+      <!-- Results View -->
+      <section id="results-section">
+        <div class="results-header">
+          <div class="main-stats-col">
+            <div class="main-stat">
+              <div class="stat-label">wpm</div>
+              <div class="stat-val" id="res-wpm">0</div>
+              <div class="pb-badge" id="pb-badge" style="display: none;">★ Personal Best</div>
+            </div>
+            <div class="main-stat">
+              <div class="stat-label">acc</div>
+              <div class="stat-val" id="res-acc">0%</div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="result-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="secondary-stats">
+          <div class="sec-stat">
+            <div class="stat-label">test type</div>
+            <div class="stat-val" id="res-test-type">time 30</div>
+          </div>
+          <div class="sec-stat">
+            <div class="stat-label">raw wpm</div>
+            <div class="stat-val" id="res-raw">0</div>
+          </div>
+          <div class="sec-stat">
+            <div class="stat-label">characters</div>
+            <div class="stat-val" id="res-chars">0 / 0 / 0 / 0</div>
+          </div>
+          <div class="sec-stat">
+            <div class="stat-label">consistency</div>
+            <div class="stat-val" id="res-consistency">0%</div>
+          </div>
+          <div class="sec-stat">
+            <div class="stat-label">time</div>
+            <div class="stat-val" id="res-time">30s</div>
+          </div>
+        </div>
+
+        <div class="results-actions">
+          <button class="btn-primary" id="btn-next-test">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 4 15 12 5 20 5 4"></polygon>
+              <line x1="19" y1="5" x2="19" y2="19"></line>
+            </svg>
+            Next Test (Tab)
+          </button>
+          <button class="btn-primary" id="btn-repeat-test">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Repeat Test
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <a class="footer-link" id="link-github" href="https://github.com/monkeytypegame/monkeytype" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          github
+        </a>
+        <span class="footer-link" id="link-theme-name">theme: serika dark</span>
+      </div>
+
+      <div class="footer-status">
+        <div class="status-dot"></div>
+        <span>ready • 0ms lag</span>
+      </div>
+    </footer>
+
+    <!-- Command Palette Modal -->
+    <div class="modal-backdrop" id="modal-palette">
+      <div class="modal-box">
+        <div class="palette-search-wrapper">
+          <div class="palette-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input type="text" id="palette-search" placeholder="Type a command or setting..." autofocus>
+        </div>
+        <div class="palette-results" id="palette-results"></div>
+      </div>
+    </div>
+
+    <!-- History & Stats Modal -->
+    <div class="modal-backdrop" id="modal-history">
+      <div class="modal-box history-modal-box">
+        <div class="modal-header">
+          <div class="modal-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            Typing History & Personal Records
+          </div>
+          <button class="close-btn" id="btn-close-history">&times;</button>
+        </div>
+        <div class="history-body">
+          <div class="history-pb-cards">
+            <div class="pb-card">
+              <div class="pb-mode">Time 15s Best</div>
+              <div class="pb-wpm" id="pb-time-15">-</div>
+            </div>
+            <div class="pb-card">
+              <div class="pb-mode">Time 30s Best</div>
+              <div class="pb-wpm" id="pb-time-30">-</div>
+            </div>
+            <div class="pb-card">
+              <div class="pb-mode">Time 60s Best</div>
+              <div class="pb-wpm" id="pb-time-60">-</div>
+            </div>
+          </div>
+
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Mode</th>
+                <th>WPM</th>
+                <th>Accuracy</th>
+                <th>Consistency</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
